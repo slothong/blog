@@ -1,0 +1,3 @@
+@for (post of posts(); track post.id) {
+<app-post-preview [postPreview]="post" (click)="handleClick(post.id)" />
+}

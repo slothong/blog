@@ -5,7 +5,9 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
+import * as fs from 'node:fs';
+import { PostPreview } from './models/post-preview';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -24,6 +26,56 @@ const angularApp = new AngularNodeAppEngine();
  * ```
  */
 
+const getAllMarkdownFiles = (dir: string): string[] => {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  const files = entries.flatMap((entry) => {
+    const fullPath = join(dir, entry.name);
+
+    if (entry.isDirectory()) {
+      return getAllMarkdownFiles(fullPath); // 재귀적으로 탐색
+    }
+
+    if (entry.isFile() && fullPath.endsWith('.md')) {
+      return [fullPath];
+    }
+
+    return [];
+  });
+  return files;
+};
+
+const extractTitleAndPreview = (
+  content: string
+): { title: string; preview: string } => {
+  const lines = content.split('\n');
+  const titleLine = lines.find((line) => line.startsWith('# '));
+  const title = titleLine ? titleLine.replace(/^# /, '').trim() : 'Untitled';
+
+  const preview = lines
+    .filter((line) => line.trim() && !line.startsWith('#'))
+    .slice(0, 3) // 첫 3줄 정도를 preview로 사용
+    .join(' ')
+    .trim()
+    .slice(0, 200); // 최대 200자
+
+  return { title, preview };
+};
+
+app.get('/api/posts', (req, res) => {
+  const postsDir = join(process.cwd(), 'posts');
+  const markdownFiles = getAllMarkdownFiles(postsDir);
+
+  const results: PostPreview[] = markdownFiles.map((filePath) => {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const { title, preview } = extractTitleAndPreview(content);
+    const relativePath = relative(process.cwd(), filePath);
+    return { id: relativePath, title, preview };
+  });
+
+  res.json(results);
+});
+
 /**
  * Serve static files from /browser
  */
@@ -32,7 +84,7 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
-  }),
+  })
 );
 
 /**
@@ -42,7 +94,7 @@ app.use((req, res, next) => {
   angularApp
     .handle(req)
     .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
+      response ? writeResponseToNodeResponse(response, res) : next()
     )
     .catch(next);
 });

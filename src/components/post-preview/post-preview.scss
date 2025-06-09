@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 5px;
+  width: 200px;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid blue;
+  }
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.preview {
+  font-size: 14px;
+  color: #999;
+}
