@@ -17,8 +17,4 @@ export class PostListComponent {
       this.posts.set(posts);
     });
   }
-
-  handleClick(id: string) {
-    console.log('click', id);
-  }
 }

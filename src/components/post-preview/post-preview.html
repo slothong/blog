@@ -1,4 +1,4 @@
 @let post = postPreview(); @if (post) {
-<span class="title">{{ post.title }}</span>
+<a class="title" [href]="post.link">{{ post.title }}</a>
 <span class="preview">{{ post.preview }}</span>
 }

@@ -1,15 +1,14 @@
-// import { Component, Input, computed, signal } from '@angular/core';
-// import { marked } from 'marked';
+import { Component, computed, input } from '@angular/core';
+import { marked } from 'marked';
 
-// @Component({
-//   selector: 'app-markdown-viewer',
-//   standalone: true,
-//   template: ` <div [innerHTML]="html()"></div> `,
-// })
-// export class MarkdownViewerComponent {
-//   @Input() markdown: string = '';
+@Component({
+  selector: 'app-markdown-viewer',
+  templateUrl: './markdown-viewer.html',
+})
+export class MarkdownViewerComponent {
+  readonly markdown = input<string>();
 
-//   html = computed(() => {
-//     return marked.parse(this.markdown || '');
-//   });
-// }
+  protected readonly html = computed(() => {
+    return marked.parse(this.markdown() ?? '');
+  });
+}

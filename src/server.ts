@@ -69,11 +69,24 @@ app.get('/api/posts', (req, res) => {
   const results: PostPreview[] = markdownFiles.map((filePath) => {
     const content = fs.readFileSync(filePath, 'utf-8');
     const { title, preview } = extractTitleAndPreview(content);
-    const relativePath = relative(process.cwd(), filePath);
-    return { id: relativePath, title, preview };
+    const relativePath = relative(join(process.cwd(), 'posts'), filePath);
+    return {
+      id: relativePath,
+      link: relativePath.replace(/\.[^/.]+$/, ''),
+      title,
+      preview,
+    };
   });
 
   res.json(results);
+});
+
+app.get('/api/posts/:year/:month/:filename', (req, res) => {
+  const { year, month, filename } = req.params;
+  const postsDir = join(process.cwd(), 'posts');
+  const filePath = `${postsDir}/${year}/${month}/${filename}.md`;
+  const content = fs.readFileSync(filePath, 'utf-8');
+  res.json(content);
 });
 
 /**

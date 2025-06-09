@@ -1,9 +1,14 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from '../pages/home/home';
+import { HomePageComponent } from '../pages/home-page/home-page';
+import { PostDetailPageComponent } from '../pages/post-detail-page/post-detail-page';
 
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    component: HomePageComponent,
+  },
+  {
+    path: ':year/:month/:filename',
+    component: PostDetailPageComponent,
   },
 ];
