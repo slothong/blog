@@ -3,4 +3,7 @@ export type PostPreview = {
   link: string;
   title: string;
   preview: string;
+  year: number;
+  month: number;
+  filename: string;
 };

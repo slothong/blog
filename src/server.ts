@@ -70,11 +70,17 @@ app.get('/api/posts', (req, res) => {
     const content = fs.readFileSync(filePath, 'utf-8');
     const { title, preview } = extractTitleAndPreview(content);
     const relativePath = relative(join(process.cwd(), 'posts'), filePath);
+    const year = Number(relativePath.split('/')[0]);
+    const month = Number(relativePath.split('/')[1]);
+    const filename = relativePath.split('/')[2].replace('.md', '');
     return {
       id: relativePath,
       link: relativePath.replace(/\.[^/.]+$/, ''),
       title,
       preview,
+      year,
+      month,
+      filename,
     };
   });
 
