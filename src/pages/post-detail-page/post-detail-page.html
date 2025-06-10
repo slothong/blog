@@ -1,1 +1,3 @@
-<app-markdown-viewer [markdown]="postContent() ?? ''" />
+@let post = postSignal(); @if (post) {
+<app-post-detail [post]="post" />
+}

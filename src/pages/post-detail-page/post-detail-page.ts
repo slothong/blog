@@ -1,18 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, effect, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MarkdownViewerComponent } from '../../components/markdown-viewer/markdown-viewer';
 import { PostDto } from '../../models/post-dto';
+import { Post } from '../../models/post';
+import { PostDetailComponent } from '../../components/post-detail/post-detail';
 
 @Component({
   selector: 'app-post-detail-page',
   styleUrl: './post-detail-page.scss',
   templateUrl: './post-detail-page.html',
-  imports: [MarkdownViewerComponent],
+  imports: [PostDetailComponent],
 })
 export class PostDetailPageComponent implements OnInit {
   readonly slug = signal<string | null>(null);
-  readonly postContent = signal<string | null>(null);
+  readonly postSignal = signal<Post | null>(null);
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {
     effect(() => {
@@ -20,7 +21,7 @@ export class PostDetailPageComponent implements OnInit {
       if (url) {
         this.http.get<PostDto>(`/api/posts/${url}`).subscribe({
           next: (postDto) => {
-            this.postContent.set(postDto.content);
+            this.postSignal.set(Post.fromDto(postDto));
           },
           error: (err) => {
             console.error(err);

@@ -82,6 +82,30 @@ app.get('/api/posts/:slug', (req, res) => {
   });
 });
 
+app.get('/api/tags', (req, res) => {
+  const postsDir = join(process.cwd(), 'posts');
+  const markdownFiles = getAllMarkdownFiles(postsDir);
+
+  const tagMap = new Map<string, number>();
+
+  markdownFiles.forEach((filePath) => {
+    const markdown = fs.readFileSync(filePath, 'utf-8');
+    const parsed = matter(markdown);
+    const tags = parsed.data['tags'];
+    tags.forEach((tag: string) => {
+      tagMap.set(tag, (tagMap.get(tag) ?? 0) + 1);
+    });
+  });
+
+  const tagNames = Array.from(tagMap.keys());
+  const result = tagNames.map((tagName) => ({
+    name: tagName,
+    count: tagMap.get(tagName) ?? 0,
+  }));
+
+  res.json(result);
+});
+
 /**
  * Serve static files from /browser
  */
