@@ -1,5 +1,5 @@
-import { Component, input } from '@angular/core';
-import { PostPreview } from '../../models/post-preview';
+import { Component, computed, input } from '@angular/core';
+import { PostPreviewDto } from '../../models/post-preview';
 
 @Component({
   selector: 'app-post-preview',
@@ -7,5 +7,14 @@ import { PostPreview } from '../../models/post-preview';
   styleUrl: './post-preview.scss',
 })
 export class PostPreviewComponent {
-  readonly postPreview = input<PostPreview>();
+  readonly postPreview = input<PostPreviewDto>();
+
+  protected readonly link = computed<string | null>(() => {
+    const postPreview = this.postPreview();
+    if (postPreview == null) return null;
+    const date = new Date(postPreview.date);
+    const year = String(date.getFullYear()).padStart(4, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${year}/${month}/${postPreview.slug}`;
+  });
 }

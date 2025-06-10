@@ -1,9 +1,7 @@
-export type PostPreview = {
-  id: string;
-  link: string;
+export type PostPreviewDto = {
   title: string;
+  date: string;
+  tags: string[];
   preview: string;
-  year: number;
-  month: number;
-  filename: string;
+  slug: string;
 };

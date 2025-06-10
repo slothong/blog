@@ -7,7 +7,7 @@ import {
 import express from 'express';
 import { join, relative } from 'node:path';
 import * as fs from 'node:fs';
-import { PostPreview } from './models/post-preview';
+import matter from 'gray-matter';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -48,6 +48,8 @@ const getAllMarkdownFiles = (dir: string): string[] => {
 const extractTitleAndPreview = (
   content: string
 ): { title: string; preview: string } => {
+  const parsed = matter(content);
+  console.log(parsed);
   const lines = content.split('\n');
   const titleLine = lines.find((line) => line.startsWith('# '));
   const title = titleLine ? titleLine.replace(/^# /, '').trim() : 'Untitled';
@@ -66,21 +68,17 @@ app.get('/api/posts', (req, res) => {
   const postsDir = join(process.cwd(), 'posts');
   const markdownFiles = getAllMarkdownFiles(postsDir);
 
-  const results: PostPreview[] = markdownFiles.map((filePath) => {
-    const content = fs.readFileSync(filePath, 'utf-8');
-    const { title, preview } = extractTitleAndPreview(content);
-    const relativePath = relative(join(process.cwd(), 'posts'), filePath);
-    const year = Number(relativePath.split('/')[0]);
-    const month = Number(relativePath.split('/')[1]);
-    const filename = relativePath.split('/')[2].replace('.md', '');
+  const results = markdownFiles.map((filePath) => {
+    const markdown = fs.readFileSync(filePath, 'utf-8');
+    const parsed = matter(markdown);
+    const splittedPath = filePath.split('/');
+    const slug = splittedPath[splittedPath.length - 1].replace('.md', '');
     return {
-      id: relativePath,
-      link: relativePath.replace(/\.[^/.]+$/, ''),
-      title,
-      preview,
-      year,
-      month,
-      filename,
+      title: parsed.data['title'],
+      date: parsed.data['date'],
+      tags: parsed.data['tags'],
+      preview: parsed.content.slice(0, 200),
+      slug,
     };
   });
 
@@ -88,6 +86,7 @@ app.get('/api/posts', (req, res) => {
 });
 
 app.get('/api/posts/:year/:month/:filename', (req, res) => {
+  console.log('#####');
   const { year, month, filename } = req.params;
   const postsDir = join(process.cwd(), 'posts');
   const filePath = `${postsDir}/${year}/${month}/${filename}.md`;

@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { PostPreview } from '../../models/post-preview';
+import { PostPreviewDto } from '../../models/post-preview';
 import { PostPreviewComponent } from '../post-preview/post-preview';
 
 @Component({
@@ -9,5 +9,5 @@ import { PostPreviewComponent } from '../post-preview/post-preview';
   imports: [PostPreviewComponent],
 })
 export class PostListComponent {
-  readonly posts = input<PostPreview[]>([]);
+  readonly posts = input<PostPreviewDto[]>([]);
 }

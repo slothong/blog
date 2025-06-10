@@ -13,7 +13,7 @@ export const routes: Routes = [
     component: PostListPageComponent,
   },
   {
-    path: ':year/:month/:filename',
+    path: ':year/:month/:slug',
     component: PostDetailPageComponent,
   },
 ];

@@ -33,8 +33,8 @@ export class PostDetailPageComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       const year = params.get('year')!;
       const month = params.get('month')!;
-      const filename = params.get('filename')!;
-      this.url.set(`${year}/${month}/${filename}`);
+      const slug = params.get('slug')!;
+      this.url.set(`${year}/${month}/${slug}`);
     });
   }
 }

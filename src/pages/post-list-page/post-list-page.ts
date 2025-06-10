@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { PostPreview } from '../../models/post-preview';
+import { PostPreviewDto } from '../../models/post-preview';
 import { HttpClient } from '@angular/common/http';
 import { PostListComponent } from '../../components/post-list/post-list';
 
@@ -10,10 +10,10 @@ import { PostListComponent } from '../../components/post-list/post-list';
   imports: [PostListComponent],
 })
 export class PostListPageComponent {
-  protected readonly posts = signal<PostPreview[]>([]);
+  protected readonly posts = signal<PostPreviewDto[]>([]);
 
   constructor(private http: HttpClient) {
-    this.http.get<PostPreview[]>('/api/posts').subscribe((posts) => {
+    this.http.get<PostPreviewDto[]>('/api/posts').subscribe((posts) => {
       this.posts.set(posts);
     });
   }
