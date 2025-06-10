@@ -1,3 +1,3 @@
-@for (post of posts(); track post.id) {
+@for (post of posts(); track post.slug) {
 <app-post-preview [postPreview]="post" />
 }

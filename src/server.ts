@@ -5,7 +5,7 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import { join, relative } from 'node:path';
+import { join } from 'node:path';
 import * as fs from 'node:fs';
 import matter from 'gray-matter';
 
@@ -45,25 +45,6 @@ const getAllMarkdownFiles = (dir: string): string[] => {
   return files;
 };
 
-const extractTitleAndPreview = (
-  content: string
-): { title: string; preview: string } => {
-  const parsed = matter(content);
-  console.log(parsed);
-  const lines = content.split('\n');
-  const titleLine = lines.find((line) => line.startsWith('# '));
-  const title = titleLine ? titleLine.replace(/^# /, '').trim() : 'Untitled';
-
-  const preview = lines
-    .filter((line) => line.trim() && !line.startsWith('#'))
-    .slice(0, 3) // 첫 3줄 정도를 preview로 사용
-    .join(' ')
-    .trim()
-    .slice(0, 200); // 최대 200자
-
-  return { title, preview };
-};
-
 app.get('/api/posts', (req, res) => {
   const postsDir = join(process.cwd(), 'posts');
   const markdownFiles = getAllMarkdownFiles(postsDir);
@@ -85,13 +66,20 @@ app.get('/api/posts', (req, res) => {
   res.json(results);
 });
 
-app.get('/api/posts/:year/:month/:filename', (req, res) => {
-  console.log('#####');
-  const { year, month, filename } = req.params;
+app.get('/api/posts/:slug', (req, res) => {
+  const { slug } = req.params;
   const postsDir = join(process.cwd(), 'posts');
-  const filePath = `${postsDir}/${year}/${month}/${filename}.md`;
-  const content = fs.readFileSync(filePath, 'utf-8');
-  res.json(content);
+  const filePath = `${postsDir}/${slug}.md`;
+  const markdown = fs.readFileSync(filePath, 'utf-8');
+  const parsed = matter(markdown);
+  res.json({
+    data: {
+      tags: parsed.data['tags'],
+      title: parsed.data['title'],
+      date: parsed.data['date'],
+    },
+    content: parsed.content,
+  });
 });
 
 /**

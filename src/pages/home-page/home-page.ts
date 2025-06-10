@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { PostListComponent } from '../../components/post-list/post-list';
 import { HttpClient } from '@angular/common/http';
-import { PostPreviewDto } from '../../models/post-preview';
+import { PostPreviewDto } from '../../models/post-preview-dto';
 
 @Component({
   selector: 'app-home-page',

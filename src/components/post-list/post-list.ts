@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { PostPreviewDto } from '../../models/post-preview';
+import { PostPreviewDto } from '../../models/post-preview-dto';
 import { PostPreviewComponent } from '../post-preview/post-preview';
 
 @Component({

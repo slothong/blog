@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { PostPreviewDto } from '../../models/post-preview';
+import { PostPreviewDto } from '../../models/post-preview-dto';
 import { HttpClient } from '@angular/common/http';
 import { PostListComponent } from '../../components/post-list/post-list';
 

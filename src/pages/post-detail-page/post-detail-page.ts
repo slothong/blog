@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, effect, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MarkdownViewerComponent } from '../../components/markdown-viewer/markdown-viewer';
+import { PostDto } from '../../models/post-dto';
 
 @Component({
   selector: 'app-post-detail-page',
@@ -10,16 +11,16 @@ import { MarkdownViewerComponent } from '../../components/markdown-viewer/markdo
   imports: [MarkdownViewerComponent],
 })
 export class PostDetailPageComponent implements OnInit {
-  readonly url = signal<string | null>(null);
+  readonly slug = signal<string | null>(null);
   readonly postContent = signal<string | null>(null);
 
   constructor(private route: ActivatedRoute, private http: HttpClient) {
     effect(() => {
-      const url = this.url();
+      const url = this.slug();
       if (url) {
-        this.http.get<string>(`/api/posts/${url}`).subscribe({
-          next: (data) => {
-            this.postContent.set(data);
+        this.http.get<PostDto>(`/api/posts/${url}`).subscribe({
+          next: (postDto) => {
+            this.postContent.set(postDto.content);
           },
           error: (err) => {
             console.error(err);
@@ -31,10 +32,8 @@ export class PostDetailPageComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
-      const year = params.get('year')!;
-      const month = params.get('month')!;
       const slug = params.get('slug')!;
-      this.url.set(`${year}/${month}/${slug}`);
+      this.slug.set(slug);
     });
   }
 }
