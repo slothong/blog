@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { LinkComponent } from '../link/link';
 
 @Component({
   selector: 'app-navigation',

@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { PostPreviewDto } from '../../models/post-preview-dto';
+import { PostPreview } from '../../models/post-preview';
 
 @Component({
   selector: 'app-post-preview',
@@ -7,7 +7,7 @@ import { PostPreviewDto } from '../../models/post-preview-dto';
   styleUrl: './post-preview.scss',
 })
 export class PostPreviewComponent {
-  readonly postPreview = input<PostPreviewDto>();
+  readonly postPreview = input<PostPreview>();
 
   protected readonly link = computed<string | null>(() => {
     const postPreview = this.postPreview();

@@ -46,6 +46,7 @@ const getAllMarkdownFiles = (dir: string): string[] => {
 };
 
 app.get('/api/posts', (req, res) => {
+  const { tag } = req.query;
   const postsDir = join(process.cwd(), 'posts');
   const markdownFiles = getAllMarkdownFiles(postsDir);
 
@@ -63,7 +64,10 @@ app.get('/api/posts', (req, res) => {
     };
   });
 
-  res.json(results);
+  if (tag == null) res.json(results);
+  else {
+    res.json(results.filter((post) => post.tags.includes(tag)));
+  }
 });
 
 app.get('/api/posts/:slug', (req, res) => {
