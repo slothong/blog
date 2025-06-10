@@ -1,15 +1,15 @@
 import { Component, signal } from '@angular/core';
-import { PostListComponent } from '../../components/post-list/post-list';
-import { HttpClient } from '@angular/common/http';
 import { PostPreview } from '../../models/post-preview';
+import { HttpClient } from '@angular/common/http';
+import { PostListComponent } from '../../components/post-list/post-list';
 
 @Component({
-  selector: 'app-home-page',
-  templateUrl: './home-page.html',
-  styleUrl: './home-page.scss',
+  selector: 'app-post-list-page',
+  templateUrl: './post-list-page.html',
+  styleUrl: './post-list-page.scss',
   imports: [PostListComponent],
 })
-export class HomePageComponent {
+export class PostListPageComponent {
   protected readonly posts = signal<PostPreview[]>([]);
 
   constructor(private http: HttpClient) {
