@@ -16,31 +16,6 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'posts/:slug',
-    renderMode: RenderMode.Prerender,
-    async getPrerenderParams() {
-      const http = inject(HttpClient);
-      const request = http.get<PostPreviewDto[]>('/api/posts').pipe(take(1));
-      const posts = await lastValueFrom(request);
-      return posts.map((post) => {
-        const slug = post.slug;
-        return {
-          slug,
-        };
-      });
-    },
-  },
-  {
-    path: '**',
-    renderMode: RenderMode.Prerender,
-    async getPrerenderParams() {
-      const http = inject(HttpClient);
-      const request = http.get<TagDto[]>('/api/tags').pipe(take(1));
-      const tags = await lastValueFrom(request);
-      return tags.map((tag) => {
-        return {
-          '**': `posts?tag=${tag.name}`,
-        };
-      });
-    },
+    renderMode: RenderMode.Server,
   },
 ];
