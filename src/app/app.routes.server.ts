@@ -3,10 +3,19 @@ import { inject } from '@angular/core';
 import { RenderMode, ServerRoute } from '@angular/ssr';
 import { lastValueFrom, take } from 'rxjs';
 import { PostPreviewDto } from '../models/post-preview-dto';
+import { TagDto } from '../models/tag-dto';
 
 export const serverRoutes: ServerRoute[] = [
   {
-    path: '**',
+    path: '',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'tags',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'posts/:slug',
     renderMode: RenderMode.Prerender,
     async getPrerenderParams() {
       const http = inject(HttpClient);
@@ -16,6 +25,20 @@ export const serverRoutes: ServerRoute[] = [
         const slug = post.slug;
         return {
           slug,
+        };
+      });
+    },
+  },
+  {
+    path: '**',
+    renderMode: RenderMode.Prerender,
+    async getPrerenderParams() {
+      const http = inject(HttpClient);
+      const request = http.get<TagDto[]>('/api/tags').pipe(take(1));
+      const tags = await lastValueFrom(request);
+      return tags.map((tag) => {
+        return {
+          '**': `posts?tag=${tag.name}`,
         };
       });
     },
