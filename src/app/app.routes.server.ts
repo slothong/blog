@@ -1,9 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { inject } from '@angular/core';
 import { RenderMode, ServerRoute } from '@angular/ssr';
-import { lastValueFrom, take } from 'rxjs';
-import { PostPreviewDto } from '../models/post-preview-dto';
-import { TagDto } from '../models/tag-dto';
 
 export const serverRoutes: ServerRoute[] = [
   {
@@ -12,7 +7,11 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'tags',
-    renderMode: RenderMode.Prerender,
+    renderMode: RenderMode.Server,
+  },
+  {
+    path: 'posts',
+    renderMode: RenderMode.Server,
   },
   {
     path: 'posts/:slug',
