@@ -3,6 +3,7 @@ import { HomePageComponent } from '../pages/home-page/home-page';
 import { PostDetailPageComponent } from '../pages/post-detail-page/post-detail-page';
 import { PostListPageComponent } from '../pages/post-list-page/post-list-page';
 import { TagsPageComponent } from '../pages/tags-page/tags-page';
+import { TagPageComponent } from '../pages/tag-page/tag-page';
 
 export const routes: Routes = [
   {
@@ -20,5 +21,9 @@ export const routes: Routes = [
   {
     path: 'tags',
     component: TagsPageComponent,
+  },
+  {
+    path: 'tags/:tag',
+    component: TagPageComponent,
   },
 ];
