@@ -16,9 +16,7 @@ export class MarkdownViewerComponent {
       langPrefix: 'hljs language-',
       highlight(code, lang, info) {
         const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-        const value = hljs.highlight(code, { language }).value;
-        console.log(value);
-        return value;
+        return hljs.highlight(code, { language }).value;
       },
     })
   );
