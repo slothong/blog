@@ -10,7 +10,6 @@ import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post-detail-page',
-  styleUrl: './post-detail-page.scss',
   templateUrl: './post-detail-page.html',
   imports: [PostDetailComponent, CommonModule],
 })

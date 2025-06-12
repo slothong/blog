@@ -10,7 +10,6 @@ import { Meta, Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-post-list-page',
   templateUrl: './post-list-page.html',
-  styleUrl: './post-list-page.scss',
   imports: [PostListComponent, CommonModule],
 })
 export class PostListPageComponent implements OnInit {

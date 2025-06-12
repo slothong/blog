@@ -9,7 +9,6 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.html',
-  styleUrl: './home-page.scss',
   imports: [PostListComponent, CommonModule],
 })
 export class HomePageComponent {

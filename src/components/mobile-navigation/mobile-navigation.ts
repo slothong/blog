@@ -4,6 +4,7 @@ import {
   effect,
   ElementRef,
   inject,
+  input,
   PLATFORM_ID,
   signal,
   TemplateRef,
@@ -12,7 +13,7 @@ import {
 } from '@angular/core';
 import lottie, { AnimationItem } from 'lottie-web';
 import { PortalManager } from '../../services/portal-manager';
-import { CdkPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { PortalModule, TemplatePortal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-mobile-navigation',
@@ -39,7 +40,6 @@ export class MobileNavigationComponent {
   private readonly isInitial = signal(true);
 
   constructor(
-    private elRef: ElementRef,
     private portalManager: PortalManager,
     private viewContainerRef: ViewContainerRef
   ) {

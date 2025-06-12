@@ -10,7 +10,6 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-tag-page',
   templateUrl: './tag-page.html',
-  styleUrl: './tag-page.scss',
   imports: [PostListComponent, CommonModule],
 })
 export class TagPageComponent implements OnInit, OnDestroy {
