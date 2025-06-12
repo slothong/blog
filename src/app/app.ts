@@ -19,7 +19,6 @@ export class App {
   constructor(private portalManager: PortalManager) {}
 
   closePortal() {
-    console.log('Closing portal');
     this.portalManager.close();
   }
 }
