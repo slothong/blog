@@ -1,15 +1,29 @@
 :host {
   display: flex;
   flex-direction: column;
-  padding: 5px;
 }
 
 .title {
-  font-size: 30px;
-  font-weight: 500;
+  margin: 3px 0 7px 0;
 }
 
 .preview {
   font-size: 14px;
   color: #999;
+}
+
+.date {
+  color: #777;
+}
+
+.tags {
+  margin-bottom: 3px;
+}
+
+.tag {
+  color: #66f;
+  transition: color 0.2s ease-in-out;
+  &:hover {
+    color: #44f;
+  }
 }

@@ -14,10 +14,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TagPageComponent {
   protected readonly posts$: Observable<PostPreview[]>;
+  protected readonly tag$: Observable<string | null>;
 
   constructor(private route: ActivatedRoute, private postApi: PostApi) {
-    this.posts$ = this.route.paramMap.pipe(
-      map((params) => params.get('tag')),
+    this.tag$ = this.route.paramMap.pipe(map((params) => params.get('tag')));
+
+    this.posts$ = this.tag$.pipe(
       filter((tag): tag is string => !!tag),
       switchMap((tag) => this.postApi.getPosts(tag))
     );

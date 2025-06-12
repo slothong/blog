@@ -1,4 +1,14 @@
 @let preview = postPreview(); @if (preview) {
-<a class="title" [href]="link()">{{ preview.title }}</a>
+<span class="date">{{preview.date.toLocaleDateString()}}</span>
+<a [href]="link()">
+  <h2 class="title">{{ preview.title }}</h2>
+</a>
+<div class="tags">
+  @for (tag of preview.tags; track tag) {
+  <a [href]="`tags/${tag}`">
+    <span class="tag"> {{ tag }} </span>
+  </a>
+  }
+</div>
 <span class="preview">{{ preview.preview }}</span>
 }
