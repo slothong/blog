@@ -1,0 +1,14 @@
+<div #iconContainer class="icon-container" (click)="toggleMenu()"></div>
+@if (isOpen()) {
+<div class="overlay" (click)="toggleMenu()"></div>
+<div class="menu">
+  <ul>
+    <li>
+      <a href="/posts">Posts</a>
+    </li>
+    <li>
+      <a href="/tags">Tags</a>
+    </li>
+  </ul>
+</div>
+}
