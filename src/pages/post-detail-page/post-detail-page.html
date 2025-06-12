@@ -1,3 +1,3 @@
-@let post = postSignal(); @if (post) {
+@let post = post$ | async; @if (post) {
 <app-post-detail [post]="post" />
 }

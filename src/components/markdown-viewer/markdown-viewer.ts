@@ -3,6 +3,7 @@ import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
 
+// TODO: hljs 등록할 언어 선택해서 번들 사이즈 줄이기
 @Component({
   selector: 'app-markdown-viewer',
   templateUrl: './markdown-viewer.html',

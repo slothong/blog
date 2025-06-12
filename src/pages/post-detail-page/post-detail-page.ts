@@ -1,40 +1,44 @@
+import { filter, map, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Component, effect, OnInit, signal } from '@angular/core';
+import { Component, effect, OnDestroy, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { PostDto } from '../../models/post-dto';
 import { Post } from '../../models/post';
 import { PostDetailComponent } from '../../components/post-detail/post-detail';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post-detail-page',
   styleUrl: './post-detail-page.scss',
   templateUrl: './post-detail-page.html',
-  imports: [PostDetailComponent],
+  imports: [PostDetailComponent, CommonModule],
 })
-export class PostDetailPageComponent implements OnInit {
-  readonly slug = signal<string | null>(null);
-  readonly postSignal = signal<Post | null>(null);
+export class PostDetailPageComponent implements OnInit, OnDestroy {
+  protected readonly post$: Observable<Post>;
+  private readonly destroy$ = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {
-    effect(() => {
-      const url = this.slug();
-      if (url) {
-        this.http.get<PostDto>(`/api/posts/${url}`).subscribe({
-          next: (postDto) => {
-            this.postSignal.set(Post.fromDto(postDto));
-          },
-          error: (err) => {
-            console.error(err);
-          },
-        });
-      }
-    });
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private title: Title
+  ) {
+    this.post$ = this.route.paramMap.pipe(
+      map((params) => params.get('slug')),
+      filter((slug): slug is string => slug != null),
+      switchMap((slug) => this.http.get<PostDto>(`/api/posts/${slug}`)),
+      map((postDto) => Post.fromDto(postDto))
+    );
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      const slug = params.get('slug')!;
-      this.slug.set(slug);
+    this.post$.pipe(takeUntil(this.destroy$)).subscribe((post) => {
+      this.title.setTitle(post.title);
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
