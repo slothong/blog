@@ -1,10 +1,10 @@
+import { map } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
-import { PostPreviewDto } from '../models/post-preview-dto';
-import { PostPreview } from '../models/post-preview';
-import { PostDto } from '../models/post-dto';
-import { Post } from '../models/post';
+import { PostPreviewDto } from '@/models/post-preview-dto';
+import { PostPreview } from '@/models/post-preview';
+import { PostDto } from '@/models/post-dto';
+import { Post } from '@/models/post';
 
 @Injectable({
   providedIn: 'root',

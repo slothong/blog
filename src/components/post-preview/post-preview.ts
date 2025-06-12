@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { PostPreview } from '../../models/post-preview';
+import { PostPreview } from '@/models/post-preview';
 
 @Component({
   selector: 'app-post-preview',

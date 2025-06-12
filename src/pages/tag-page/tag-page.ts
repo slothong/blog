@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PostListComponent } from '../../components/post-list/post-list';
-import { PostApi } from '../../services/post-api';
 import { filter, map, Observable, Subject, switchMap, takeUntil } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { PostPreview } from '../../models/post-preview';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { PostListComponent } from '@/components/post-list/post-list';
+import { PostApi } from '@/services/post-api';
+import { CommonModule } from '@angular/common';
+import { PostPreview } from '@/models/post-preview';
 
 @Component({
   selector: 'app-tag-page',

@@ -1,8 +1,8 @@
 import { Component, computed } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from '../components/header/header';
-import { PortalManager } from '../services/portal-manager';
 import { PortalModule } from '@angular/cdk/portal';
+import { HeaderComponent } from '@/components/header/header';
+import { PortalManager } from '@/services/portal-manager';
 
 @Component({
   selector: 'app-root',

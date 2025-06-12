@@ -3,9 +3,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { Post } from '../../models/post';
-import { PostDetailComponent } from '../../components/post-detail/post-detail';
-import { PostApi } from '../../services/post-api';
+import { Post } from '@/models/post';
+import { PostDetailComponent } from '@/components/post-detail/post-detail';
+import { PostApi } from '@/services/post-api';
 
 @Component({
   selector: 'app-post-detail-page',

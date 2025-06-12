@@ -1,10 +1,10 @@
-import { Component, signal } from '@angular/core';
-import { PostListComponent } from '../../components/post-list/post-list';
-import { HttpClient } from '@angular/common/http';
-import { PostApi } from '../../services/post-api';
 import { Observable } from 'rxjs';
-import { PostPreview } from '../../models/post-preview';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { PostApi } from '@/services/post-api';
+import { PostPreview } from '@/models/post-preview';
+import { PostListComponent } from '@/components/post-list/post-list';
 
 @Component({
   selector: 'app-home-page',

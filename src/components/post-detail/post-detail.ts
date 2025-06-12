@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { Post } from '../../models/post';
-import { MarkdownViewerComponent } from '../markdown-viewer/markdown-viewer';
+import { Post } from '@/models/post';
+import { MarkdownViewerComponent } from '@/components//markdown-viewer/markdown-viewer';
 
 @Component({
   selector: 'app-post-detail',

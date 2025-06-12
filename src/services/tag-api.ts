@@ -1,8 +1,8 @@
+import { map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TagDto } from '../models/tag-dto';
-import { Tag } from '../models/tag';
-import { map } from 'rxjs';
+import { TagDto } from '@/models/tag-dto';
+import { Tag } from '@/models/tag';
 
 @Injectable({
   providedIn: 'root',

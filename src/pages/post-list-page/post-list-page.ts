@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import { Observable, switchMap } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { PostListComponent } from '../../components/post-list/post-list';
-import { PostApi } from '../../services/post-api';
-import { PostPreview } from '../../models/post-preview';
 import { Meta, Title } from '@angular/platform-browser';
+import { PostListComponent } from '@/components/post-list/post-list';
+import { PostApi } from '@/services/post-api';
+import { PostPreview } from '@/models/post-preview';
 
 @Component({
   selector: 'app-post-list-page',

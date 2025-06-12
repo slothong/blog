@@ -12,8 +12,8 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import lottie, { AnimationItem } from 'lottie-web';
-import { PortalManager } from '../../services/portal-manager';
 import { PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { PortalManager } from '@/services/portal-manager';
 
 @Component({
   selector: 'app-mobile-navigation',

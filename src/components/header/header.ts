@@ -1,3 +1,4 @@
+import { Subject, takeUntil } from 'rxjs';
 import {
   Component,
   inject,
@@ -6,11 +7,10 @@ import {
   signal,
 } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { LogoComponent } from '../logo/logo';
-import { NavigationComponent } from '../navigation/navigation';
-import { MobileNavigationComponent } from '../mobile-navigation/mobile-navigation';
-import { Subject, takeUntil } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { LogoComponent } from '@/components/logo/logo';
+import { MobileNavigationComponent } from '@/components/mobile-navigation/mobile-navigation';
+import { NavigationComponent } from '@/components/navigation/navigation';
 
 @Component({
   selector: 'app-header',

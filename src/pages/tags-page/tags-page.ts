@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Tag } from '../../models/tag';
-import { Title } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
-import { TagApi } from '../../services/tag-api';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { TagApi } from '@/services/tag-api';
+import { Tag } from '@/models/tag';
 
 @Component({
   selector: 'app-tags-page',

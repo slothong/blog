@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { PostPreviewComponent } from '../post-preview/post-preview';
-import { PostPreview } from '../../models/post-preview';
+import { PostPreviewComponent } from '@/components/post-preview/post-preview';
+import { PostPreview } from '@/models/post-preview';
 
 @Component({
   selector: 'app-post-list',
