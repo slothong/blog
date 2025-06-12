@@ -6,17 +6,25 @@ import {
   inject,
   PLATFORM_ID,
   signal,
+  TemplateRef,
   viewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import lottie, { AnimationItem } from 'lottie-web';
+import { PortalManager } from '../../services/portal-manager';
+import { CdkPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-mobile-navigation',
   styleUrl: './mobile-navigation.scss',
   templateUrl: './mobile-navigation.html',
+  imports: [PortalModule],
 })
 export class MobileNavigationComponent {
   private readonly iconContainer = viewChild<ElementRef>('iconContainer');
+
+  private readonly portalContent =
+    viewChild<TemplateRef<null>>('portalContent');
 
   protected readonly isOpen = signal(false);
 
@@ -28,10 +36,15 @@ export class MobileNavigationComponent {
 
   private readonly speed = 1.5;
 
-  constructor(private elRef: ElementRef) {
+  private readonly isInitial = signal(true);
+
+  constructor(
+    private elRef: ElementRef,
+    private portalManager: PortalManager,
+    private viewContainerRef: ViewContainerRef
+  ) {
     effect(() => {
       const element = this.iconContainer()?.nativeElement;
-      console.log(element);
       if (isPlatformBrowser(this.platformId) && element) {
         this.anim = lottie.loadAnimation({
           container: element,
@@ -43,15 +56,32 @@ export class MobileNavigationComponent {
         this.anim.setSpeed(this.speed);
       }
     });
+
+    effect(() => {
+      if (!this.portalManager.isOpen() && !this.isInitial()) {
+        this.playCloseAnimation();
+        this.isOpen.set(false);
+      }
+    });
   }
 
   toggleMenu() {
+    this.isInitial.set(false);
     if (this.isOpen()) {
       this.playCloseAnimation();
       this.isOpen.set(false);
+      this.portalManager.close();
     } else {
       this.playOpenAnimation();
       this.isOpen.set(true);
+      const portalContent = this.portalContent();
+      if (!portalContent) {
+        console.error('Portal content is not defined');
+        return;
+      }
+      this.portalManager.open(
+        new TemplatePortal(portalContent, this.viewContainerRef)
+      );
     }
   }
 

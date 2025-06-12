@@ -18,12 +18,26 @@
 }
 
 .menu {
-  position: fixed;
+  position: absolute;
   top: 0;
-  right: 0;
+  left: 100%;
   width: 200px;
-  height: 100vh;
+  height: 100%;
   background: #fff;
+
+  &.open {
+    animation: leftanimation 0.3s ease forwards;
+  }
+}
+
+@keyframes leftanimation {
+  from {
+    left: 100%;
+  }
+
+  to {
+    left: calc(100% - 200px);
+  }
 }
 
 ul {
