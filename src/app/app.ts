@@ -8,6 +8,4 @@ import { HeaderComponent } from '../components/header/header';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {
-  protected title = 'blog';
-}
+export class App {}

@@ -4,3 +4,9 @@
   padding: 7px 20px;
   border-bottom: 1px solid #eee;
 }
+
+@media (max-width: 599.9px) {
+  :host {
+    justify-content: space-between;
+  }
+}

@@ -1,4 +1,8 @@
 <app-logo imageUrl="assets/logo.png" alt="Slothong" link="/">
   Slothong
 </app-logo>
+@if (isMobile()) {
+<app-mobile-navigation />
+} @else {
 <app-navigation />
+}
