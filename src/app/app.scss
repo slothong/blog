@@ -30,7 +30,7 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #aaa;
+  background: #000;
   animation: colorFade 0.15s linear forwards;
 }
 
@@ -39,6 +39,6 @@ main {
     opacity: 0;
   }
   100% {
-    opacity: 0.5;
+    opacity: 0.4;
   }
 }
