@@ -99,24 +99,52 @@ var MyComponent = class _MyComponent {
 
 컴파일러는 더 이상 마법을 부리지 않고, 컴파일된 코드도 그대로 `inject` 함수를 사용하고 있다.
 
-<!-- ## `inject` 함수의 동작
+## Injection Context
 
-우선 앞서 봤던 `ɵɵdirectiveInject` 함수는 어떻게 생겼는지 살펴보자.
+`inject()` 함수를 어디에서나 호출할 수 있는 것은 아니다. `inject()`를 호출하면 해당 객체를 주입해줄 injector를 찾게 되는데, injector에 접근할 수 있는 범위를 injection context라고 한다. 공식문서에 따르면 유효한 injection context는 아래와 같다.
 
-```ts
-export function ɵɵdirectiveInject<T>(token: ProviderToken<T>, flags = InternalInjectFlags.Default): T | null {
-  const lView = getLView();
-  // Fall back to inject() if view hasn't been created. This situation can happen in tests
-  // if inject utilities are used before bootstrapping.
-  if (lView === null) {
-    // Verify that we will not get into infinite loop.
-    ngDevMode && assertInjectImplementationNotEqual(ɵɵdirectiveInject);
-    return ɵɵinject(token, flags);
-  }
-  const tNode = getCurrentTNode();
-  const value = getOrCreateInjectable<T>(tNode as TDirectiveHostNode, lView, resolveForwardRef(token), flags);
-  ngDevMode && emitInjectEvent(token as Type<unknown>, value, flags);
-  return value;
+- DI 시스템에 의해 인스턴스화되는 클래스(예: @Injectable 또는 @Component)의 생성자(constructor) 내부에서
+- 이러한 클래스의 필드 초기화 구문에서
+- Provider나 @Injectable에 지정된 useFactory 팩토리 함수 내부에서
+- InjectionToken에 지정된 팩토리 함수 내부에서
+- 주입 컨텍스트(injection context) 내에서 실행되는 스택 프레임 안에서
+
+실제로 앵귤러가 injector를 어떻게 설정하는지는 크롬 DevTools에서 확인할 수 있다. 우선 앵귤러 내부 코드까지 디버거가 감지하도록 하기 위해 Settings > Ignore List > Ignore Listing 에서 Enable Ignore Listing 체크박스를 해제해준다. 그 다음 앵귤러 프로젝트의 `angular.json`에서 architect > build > configurations > development > sourceMap 속성을 `false`로 설정한 후 ng serve로 개발 서버를 띄운다. 그러면 DevTools에서 앵귤러 컴포넌트의 factory 함수에 breakpoint를 걸 수 있게 된다.
+
+```js
+var HeaderComponent = class _HeaderComponent {
+  ...
+  static \u0275fac = function HeaderComponent_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _HeaderComponent)(i026.\u0275\u0275directiveInject(HlmDialogService)); // 이 라인에 breakpoint를 건다.
+  };
+  ...
+```
+
+그리고 페이지를 새로고침하면 이 factory 함수가 호출되는 call stack을 확인할 수 있다. `getNodeInjectable()`함수 안에서 factory 함수가 호출되었다는 것을 알 수 있는데 그 전에 `setInjectImplementation(factory.injectImpl)`로 inject의 구현을 설정하고 있다.
+
+```js
+function getNodeInjectable(lView, tView, index, tNode) {
+    ...
+    const previousInjectImplementation = factory.injectImpl
+        ? setInjectImplementation(factory.injectImpl)
+        : null; // injectImplementation 설정
+    const success = enterDI(lView, tNode, 0 /* InternalInjectFlags.Default */);
+    ngDevMode &&
+        assertEqual(success, true, "Because flags do not contain `SkipSelf' we expect this to always succeed.");
+    try {
+        ngDevMode && emitInjectorToCreateInstanceEvent(token);
+        value = lView[index] = factory.factory(undefined, tData, lView, tNode); // 팩토리 함수 호출
+        ngDevMode && emitInstanceCreatedByInjectorEvent(value);
+  ...
 }
 ```
- -->
+
+이렇게 설정된 injectImplementation은 컴포넌트의 생성자 또는 필드 초기화에서 `inject()` 함수가 호출되었을 때 참조하게 된다. 아래는 `inject()`가 호출하는 `ɵɵinject()`함수의 정의이다.
+
+```ts
+export function ɵɵinject<T>(token: ProviderToken<T> | HostAttributeToken, flags = InternalInjectFlags.Default): T | null {
+  return (getInjectImplementation() || injectInjectorOnly)(resolveForwardRef(token as Type<T>), flags);
+}
+```
+
+따라서 `injectImplementation`이나 injector가 설정되지 않은 시점에서 `inject()`를 호출하게 되면 에러를 발생시키게 된다.
