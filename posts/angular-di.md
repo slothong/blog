@@ -99,6 +99,62 @@ var MyComponent = class _MyComponent {
 
 컴파일러는 더 이상 마법을 부리지 않고, 컴파일된 코드도 그대로 `inject` 함수를 사용하고 있다.
 
+사실 `inject` 함수를 권장하는 이유는 ES2022에서 class field 문법이 도입되었기 때문이다. ES2022 이전까지는 class field가 문법적으로 허용되지 않았기 때문에 아래와 같이 생성자 안에서 property를 선언하고 초기화해야 했었다.
+
+```ts
+class Person {
+  constructor(name) {
+    this.name = name; // 생성자에서 필드를 정의
+  }
+}
+```
+
+그러나 ES2022에서 class field가 도입되고 아래와 같은 코드가 가능해졌다.
+
+```ts
+class Person {
+  name = "Unknown";
+}
+```
+
+문제는 앵귤러 코드는 타입스크립트로 작성된다는 것이고, 타입스크립트의 코드가 ECMAScript로 변환될 때 이 클래스 필드 문법으로 인해 동작이 달라진다는 점이다. 예를 들어,
+
+```ts
+@Component({
+  /* ... */
+})
+export class UserProfile {
+  private user = this.userData.getCurrent();
+
+  constructor(private userData: UserData) {}
+}
+```
+
+이 코드가 컴파일된 결과는 두 가지 가능성이 있다. 하나는 클래스 필드를 사용하지 않는 버전이고,
+
+```js
+export class UserProfile {
+  constructor(userData) {
+    this.userData = userData;
+    this.user = this.userData.getCurrent();
+  }
+}
+```
+
+다른 하나는 클래스 필드를 사용하는 ES2022 이후 버전의 코드이다.
+
+```js
+export class UserProfile {
+  userData;
+  user = this.userData.getCurrent(); // Error! userData is not yet initialized!
+  constructor(userData) {
+    this.userData = userData;
+  }
+}
+```
+
+두 번째의 경우 userData가 초기화되기 전에 참조되었기 때문에 에러가 발생한다. 이처럼 클래스 필드의 적용 여부에 따라 동작이 달라지는 코드가 만들어지기 때문에 타입스크립트는 [`useDefineForClassFields`](https://www.typescriptlang.org/tsconfig/#useDefineForClassFields) 옵션을 제공해 사용자가 클래스필드 사용 여부를 결정할 수 있게 했다. 만약 이 옵션을 `false`로 설정하면 클래스 필드를 사용하지 않기 때문에 이전과 같은 결과가 나오겠지만 `true`로 설정한다면 생성자로 injectable을 주입받는 코드는 예상치 못한 동작을 하게 될 것이다. 따라서 생성자를 사용하지 않고 클래스 필드의 선언과 동시에 초기화시키는 `inject()` 함수를 사용하면 `useDefineForClassFields` 옵션 값과 관계 없이 의도한대로 동작하는 코드가 컴파일되는 것을 보장할 수 있다.
+
 ## Injection Context
 
 `inject()` 함수를 어디에서나 호출할 수 있는 것은 아니다. `inject()`를 호출하면 해당 객체를 주입해줄 injector를 찾게 되는데, injector에 접근할 수 있는 범위를 injection context라고 한다. 공식문서에 따르면 유효한 injection context는 아래와 같다.
