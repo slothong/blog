@@ -1,2 +1,4 @@
-<h1>최근 게시물</h1>
-<app-post-list [posts]="(posts | async) ?? []" />
+<app-page-layout>
+  <h1 pageLayoutHeader>최근 게시물</h1>
+  <app-post-list [posts]="(posts | async) ?? []" pageLayoutContent />
+</app-page-layout>

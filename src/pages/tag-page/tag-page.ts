@@ -6,11 +6,12 @@ import { PostListComponent } from '@/components/post-list/post-list';
 import { PostApi } from '@/services/post-api';
 import { CommonModule } from '@angular/common';
 import { PostPreview } from '@/models/post-preview';
+import { PageLayoutComponent } from '@/components/page-layout/page-layout';
 
 @Component({
   selector: 'app-tag-page',
   templateUrl: './tag-page.html',
-  imports: [PostListComponent, CommonModule],
+  imports: [PostListComponent, CommonModule, PageLayoutComponent],
 })
 export class TagPageComponent implements OnInit, OnDestroy {
   protected readonly posts$: Observable<PostPreview[]>;

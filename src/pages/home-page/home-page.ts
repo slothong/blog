@@ -5,11 +5,12 @@ import { HttpClient } from '@angular/common/http';
 import { PostApi } from '@/services/post-api';
 import { PostPreview } from '@/models/post-preview';
 import { PostListComponent } from '@/components/post-list/post-list';
+import { PageLayoutComponent } from '@/components/page-layout/page-layout';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.html',
-  imports: [PostListComponent, CommonModule],
+  imports: [PostListComponent, CommonModule, PageLayoutComponent],
 })
 export class HomePageComponent {
   protected readonly posts: Observable<PostPreview[]>;

@@ -4,12 +4,13 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { TagApi } from '@/services/tag-api';
 import { Tag } from '@/models/tag';
+import { PageLayoutComponent } from '@/components/page-layout/page-layout';
 
 @Component({
   selector: 'app-tags-page',
   templateUrl: './tags-page.html',
   styleUrl: './tags-page.scss',
-  imports: [CommonModule],
+  imports: [CommonModule, PageLayoutComponent],
 })
 export class TagsPageComponent implements OnInit {
   protected readonly tags$: Observable<Tag[]>;
