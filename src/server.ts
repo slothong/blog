@@ -64,6 +64,10 @@ app.get('/api/posts', (req, res) => {
     };
   });
 
+  results.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+
   if (tag == null) res.json(results);
   else {
     res.json(results.filter((post) => post.tags.includes(tag)));
