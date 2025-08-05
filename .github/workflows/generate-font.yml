@@ -1,0 +1,62 @@
+name: Generate Subset Font and Commit
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-subset-font:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Install fonttools (for pyftsubset)
+        run: |
+          pip3 install fonttools
+
+      - name: Extract text from HTML
+        run: |
+          find ./dist -name "*.html" -exec cat {} \; | \
+            sed 's/<[^>]*>//g' | \
+            tr -d '\n' | \
+            tr -cd '[:print:]' | \
+            fold -w1 | \
+            sort | \
+            uniq | \
+            tr -d '\n' > all-text.txt
+
+      - name: Download PretendardVariable.ttf
+        run: |
+          curl -L -o PretendardVariable.ttf https://github.com/orioncactus/pretendard/blob/main/packages/pretendard/dist/public/variable/PretendardVariable.ttf
+
+      - name: Generate subset font
+        run: |
+          pyftsubset PretendardVariable.ttf \
+            --text-file=all-text.txt \
+            --flavor=woff2 \
+            --output-file=public/assets/fonts/pretendard-custom.woff2
+
+      - name: Commit subset font
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add public/assets/fonts/pretendard-custom.woff2
+          git commit -m "chore: generate subset font"
+          git push
