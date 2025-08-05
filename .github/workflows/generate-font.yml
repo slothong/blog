@@ -29,6 +29,7 @@ jobs:
       - name: Install fonttools (for pyftsubset)
         run: |
           pip3 install fonttools
+          pip3 install brotli
 
       - name: Extract text from HTML
         run: |
