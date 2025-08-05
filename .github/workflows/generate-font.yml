@@ -43,7 +43,7 @@ jobs:
 
       - name: Download PretendardVariable.ttf
         run: |
-          curl -L -o PretendardVariable.ttf https://github.com/orioncactus/pretendard/blob/main/packages/pretendard/dist/public/variable/PretendardVariable.ttf
+          curl -L -o PretendardVariable.ttf https://github.com/orioncactus/pretendard/raw/main/packages/pretendard/dist/public/variable/PretendardVariable.ttf
 
       - name: Generate subset font
         run: |
