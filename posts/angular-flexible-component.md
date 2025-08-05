@@ -1,6 +1,6 @@
 ---
 title: "Angular에서 유연한 컴포넌트 구현하기"
-date: 2025-07-02
+date: 2025-08-03
 tags:
   - Angular
 ---
